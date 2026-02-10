@@ -1,0 +1,12 @@
+# .NET
+bin/
+obj/
+
+# Environment
+.env
+appsettings.Development.json
+
+# Visual Studio
+.vs/
+*.user
+*.suo

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PeminjamanRuanganBackend.Data;
 
@@ -11,9 +12,11 @@ using PeminjamanRuanganBackend.Data;
 namespace _2026_PeminjamanRuangan_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209122630_FixPeminjamanModel")]
+    partial class FixPeminjamanModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,26 +54,6 @@ namespace _2026_PeminjamanRuangan_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Peminjamans");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NamaPeminjam = "Safa",
-                            Ruangan = "Lab A",
-                            Status = "Diterima",
-                            TanggalKembali = new DateTime(2026, 2, 11, 20, 46, 7, 671, DateTimeKind.Local).AddTicks(3462),
-                            TanggalPinjam = new DateTime(2026, 2, 10, 20, 46, 7, 670, DateTimeKind.Local).AddTicks(1775)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NamaPeminjam = "Budi",
-                            Ruangan = "Lab B",
-                            Status = "Ditolak",
-                            TanggalKembali = new DateTime(2026, 2, 12, 20, 46, 7, 671, DateTimeKind.Local).AddTicks(4319),
-                            TanggalPinjam = new DateTime(2026, 2, 10, 20, 46, 7, 671, DateTimeKind.Local).AddTicks(4317)
-                        });
                 });
 #pragma warning restore 612, 618
         }
