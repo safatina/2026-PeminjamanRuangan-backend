@@ -1,18 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using PeminjamanRuanganBackend.Data;
 using PeminjamanRuanganBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
 builder.Services.AddControllers();
 builder.Services.AddScoped<PeminjamanService>();
 
-// Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔹 TAMBAH CORS DI SINI
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -24,25 +22,38 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Peminjaman Ruangan API",
+        Description = "API untuk aplikasi Peminjaman Ruangan"
+    });
+});
 
 var app = builder.Build();
 
-// Middleware
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DbInitializer.Initialize(db); 
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Peminjaman Ruangan API V1");
+    c.RoutePrefix = "swagger"; 
+});
 
 app.UseHttpsRedirection();
 
-// 🔹 AKTIFKAN CORS (WAJIB SEBELUM MapControllers)
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
